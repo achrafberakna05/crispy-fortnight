@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello TESNIME</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Chewy&family=Poppins:wght@400;600&family=Lora:ital@1&family=Caveat:wght@600&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      --bg: #f4e6e8;
+      --maroon: #7a0f1a;
+      --pink: #e8566f;
+      --card: #f8d6d6;
+      --ink: #3b2a2d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      font-family: Poppins, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      overflow: hidden;
+    }
+
+    .page {
+      position: fixed;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      overflow: auto;
+    }
+
+    .page.on {
+      display: flex;
+      animation: appear 0.4s ease;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    h1,
+    h2 {
+      font-family: Chewy, "Comic Sans MS", cursive;
+      color: var(--maroon);
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-size: clamp(28px, 6vw, 44px);
+    }
+
+    h2 {
+      font-size: clamp(26px, 5vw, 36px);
+    }
+
+    .sub {
+      font-size: 13px;
+      opacity: 0.7;
+      margin: 6px 0 18px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 30px;
+      font: 600 14px Poppins, sans-serif;
+      color: #fff;
+      background: var(--pink);
+      box-shadow: 0 8px 18px rgba(232, 86, 111, 0.35);
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: transform 0.15s;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    .btn.ghost {
+      background: #e9b9c0;
+      box-shadow: none;
+    }
+
+    .row {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .hello {
+      font-size: 13px;
+      margin-top: 6px;
+      letter-spacing: 1px;
+    }
+
+    #hearts {
+      position: fixed;
+      left: 10px;
+      top: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    #hearts i {
+      position: absolute;
+      font-style: normal;
+      color: #ee7b92;
+      animation: sway 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes sway {
+      to {
+        transform: translateY(10px) rotate(8deg);
+      }
+    }
+
+    #song {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 9;
+      font-size: 10px;
+      padding: 6px 12px;
+    }
+
+    .home {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      background: #f6c4cc;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Menu */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      width: min(420px, 100%);
+    }
+
+    .tile {
+      aspect-ratio: 1 / 0.85;
+      border-radius: 18px;
+      border: 2px solid #b3202f;
+      background: var(--card);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+      box-shadow: 0 6px 16px rgba(179, 32, 47, 0.15);
+    }
+
+    .tile:hover {
+      transform: translateY(-4px) rotate(-1deg);
+    }
+
+    .tile svg {
+      width: 62%;
+      height: 62%;
+    }
+
+    /* Bouquet */
+    .bq {
+      position: relative;
+      width: min(560px, 100%);
+      height: min(440px, 58vh);
+    }
+
+    .bq .panel {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 44%;
+      height: 100%;
+      background: #f6a9ac;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+    }
+
+    .bq .panel svg {
+      width: 92%;
+    }
+
+    .msg {
+      position: absolute;
+      max-width: 40%;
+      padding: 10px 12px;
+      background: #e7eff2;
+      border: 1px solid #9aa;
+      border-radius: 12px;
+      font: italic 12px/1.4 Lora, serif;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+      animation: float 5s ease-in-out infinite alternate;
+    }
+
+    @keyframes float {
+      to {
+        transform: translateY(-8px);
+      }
+    }
+
+    /* Photos */
+.board {
+  width: min(560px, 100%);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.pol {
+  background: #fff;
+  padding: 8px 8px 22px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.pol img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.pol:nth-child(odd) {
+  transform: rotate(-2deg);
+}
+
+.pol:nth-child(even) {
+  transform: rotate(2deg);
+}
+
+@media (max-width: 480px) {
+  .board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+    /* Letter */
+    .letter {
+      width: min(440px, 100%);
+      padding: 30px 26px;
+      background: #eef2e8;
+      border-radius: 6px;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2);
+      text-align: left;
+      font: italic 15px/1.8 Lora, serif;
+      border: 8px solid #f3dede;
+      transform: rotate(-1.5deg);
+    }
+
+    .letter p {
+      margin-bottom: 12px;
+    }
+
+    .letter .sig {
+      text-align: right;
+    }
+
+    /* Unlock */
+    input {
+      width: min(260px, 80%);
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1px solid #c9a3a8;
+      font: 14px Poppins, sans-serif;
+      text-align: center;
+      background: #fff8f8;
+      outline: none;
+      margin-bottom: 14px;
+    }
+
+    input:focus {
+      border-color: var(--pink);
+    }
+
+    .shake {
+      animation: shake 0.4s;
+    }
+
+    @keyframes shake {
+      25% {
+        transform: translateX(-8px);
+      }
+      75% {
+        transform: translateX(8px);
+      }
+    }
+
+    #hint {
+      font-size: 12px;
+      height: 18px;
+      margin-bottom: 8px;
+      color: var(--maroon);
+    }
+
+    /* Plans */
+    .plans {
+      width: min(520px, 100%);
+      padding: 26px 18px 12px;
+      background: #d9eaee;
+      border-radius: 22px;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+    }
+
+    .fc {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 14px;
+    }
+
+    .flip {
+      width: 30%;
+      aspect-ratio: 1 / 1.5;
+      perspective: 700px;
+      cursor: pointer;
+    }
+
+    .flip > div {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.7s;
+      transform-style: preserve-3d;
+    }
+
+    .flip.open > div {
+      transform: rotateY(180deg);
+    }
+
+    .flip span {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 8px;
+      backface-visibility: hidden;
+      background: #efe6cf;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      font: italic 15px Lora, serif;
+    }
+
+    .flip span + span {
+      transform: rotateY(180deg);
+      font-size: 12px;
+      background: #f7efdc;
+    }
+
+    .flip b {
+      display: block;
+      font: 400 17px Chewy, cursive;
+      color: var(--maroon);
+      margin-bottom: 6px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="hearts"></div>
+
+  <button class="btn" id="song" onclick="toggleSong()">Play Our Song</button>
+  <audio id="aud" src="song.mp3.mp3" loop></audio>
+
+  <!-- SVG pieces -->
+  <svg width="0" height="0" style="position: absolute">
+    <defs>
+      <g id="rose">
+        <circle r="22" fill="#e0301e"></circle>
+        <circle r="15" fill="#c7220f"></circle>
+        <path
+          d="M0-9c8 0 10 9 2 11-8 1-9-7-3-8"
+          fill="none"
+          stroke="#7d1108"
+          stroke-width="2.2"
+          stroke-linecap="round"
+        ></path>
+      </g>
+
+      <g id="cat">
+        <path
+          d="M30 50 L36 14 L62 36 Q100 26 138 36 L164 14 L170 50 Q186 100 150 128 Q100 150 50 128 Q14 100 30 50Z"
+          fill="#cfe8f5"
+          stroke="#222"
+          stroke-width="4"
+          stroke-linejoin="round"
+        ></path>
+        <circle cx="70" cy="86" r="5" fill="#222"></circle>
+        <circle cx="130" cy="86" r="5" fill="#222"></circle>
+        <path
+          d="M92 100 Q100 108 108 100"
+          fill="none"
+          stroke="#222"
+          stroke-width="4"
+          stroke-linecap="round"
+        ></path>
+        <circle cx="56" cy="102" r="9" fill="#f6a0b0" opacity="0.7"></circle>
+        <circle cx="144" cy="102" r="9" fill="#f6a0b0" opacity="0.7"></circle>
+        <path
+          d="M150 40 l22 -14 l-4 26z M150 40 l-22 -14 l4 26z"
+          fill="#e8566f"
+          stroke="#a31d34"
+          stroke-width="3"
+          stroke-linejoin="round"
+        ></path>
+        <circle cx="150" cy="40" r="6" fill="#e8566f" stroke="#a31d34" stroke-width="3"></circle>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- Intro -->
+  <section class="page on" id="intro">
+    <svg viewBox="0 0 200 160" width="150" aria-hidden="true">
+      <use href="#cat"></use>
+    </svg>
+    <p class="hello">Hello TESNIME</p>
+    <h1>Do you want to see your gift?</h1>
+    <div class="row">
+      <button class="btn" onclick="go('menu')">YES PLEASE</button>
+      <button class="btn ghost" onclick="go('no')">NO THANKS</button>
+    </div>
+  </section>
+
+  <!-- No -->
+  <section class="page" id="no">
+    <div style="font-size: 90px">😒</div>
+    <h1>Baby Hates Me</h1>
+    <div class="row">
+      <button class="btn ghost" onclick="go('intro')">Try Again</button>
+    </div>
+  </section>
+
+  <!-- Menu -->
+  <section class="page" id="menu">
+    <h2>Made just for you</h2>
+    <p class="sub">Tap a card to open your surprise ✨</p>
+
+    <div class="grid">
+      <div class="tile" onclick="go('photos')" title="Captured memories">
+        <svg viewBox="0 0 100 80" aria-hidden="true">
+          <rect x="6" y="18" width="88" height="56" rx="10" fill="#f08a7a" stroke="#c7473f" stroke-width="3"></rect>
+          <rect x="30" y="8" width="24" height="12" rx="4" fill="#f08a7a" stroke="#c7473f" stroke-width="3"></rect>
+          <circle cx="50" cy="46" r="20" fill="#fff" stroke="#c7473f" stroke-width="3"></circle>
+          <path d="M50 56 L40 46 a6 6 0 0 1 10-6 a6 6 0 0 1 10 6z" fill="#e0301e"></path>
+        </svg>
+      </div>
+
+      <div class="tile" onclick="go('letter')" title="Letter">
+        <svg viewBox="0 0 100 80" aria-hidden="true">
+          <rect x="8" y="10" width="84" height="60" rx="4" fill="#fff" stroke="#222" stroke-width="3"></rect>
+          <path d="M8 12 L50 44 L92 12 M8 68 L38 38 M92 68 L62 38" fill="none" stroke="#222" stroke-width="3"></path>
+          <circle cx="50" cy="44" r="7" fill="#e0301e" stroke="#222" stroke-width="2"></circle>
+        </svg>
+      </div>
+
+      <div class="tile" onclick="go('unlock')" title="One last surprise">
+        <svg viewBox="0 0 100 80" aria-hidden="true">
+          <path d="M50 40 L12 14 Q2 40 12 66Z M50 40 L88 14 Q98 40 88 66Z" fill="#f08a95" stroke="#c7473f" stroke-width="3" stroke-linejoin="round"></path>
+          <rect x="40" y="28" width="20" height="24" rx="6" fill="#e8566f" stroke="#c7473f" stroke-width="3"></rect>
+          <path d="M42 56 L30 76 M58 56 L70 76" stroke="#c7473f" stroke-width="5" stroke-linecap="round"></path>
+        </svg>
+      </div>
+
+      <div class="tile" onclick="go('bouquet')" title="A Bouquet Just for You">
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <g transform="translate(34 28) scale(.5)"><use href="#rose"></use></g>
+          <g transform="translate(66 28) scale(.5)"><use href="#rose"></use></g>
+          <g transform="translate(50 20) scale(.5)"><use href="#rose"></use></g>
+          <g transform="translate(40 46) scale(.5)"><use href="#rose"></use></g>
+          <g transform="translate(60 46) scale(.5)"><use href="#rose"></use></g>
+          <path d="M30 50 L50 92 L70 50Z" fill="#f4d9c2" stroke="#b3202f" stroke-width="2"></path>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bouquet -->
+  <section class="page" id="bouquet">
+    <h2>A Bouquet Just for You</h2>
+    <p class="sub">Every flower carries a little message 🌹</p>
+
+    <div class="bq">
+      <div class="panel">
+        <svg viewBox="0 0 200 260" aria-hidden="true">
+          <path d="M30 120 L100 250 L170 120Z" fill="#fbe9dc" stroke="#d9b7a0" stroke-width="2"></path>
+          <g transform="translate(60 80)"><use href="#rose"></use></g>
+          <g transform="translate(140 80)"><use href="#rose"></use></g>
+          <g transform="translate(100 50)"><use href="#rose"></use></g>
+          <g transform="translate(78 120)"><use href="#rose"></use></g>
+          <g transform="translate(122 120)"><use href="#rose"></use></g>
+          <g transform="translate(100 95)"><use href="#rose"></use></g>
+          <path d="M70 160 Q100 190 130 160 Q100 215 70 160Z" fill="#e0301e"></path>
+          <circle cx="100" cy="170" r="8" fill="#c7220f"></circle>
+        </svg>
+      </div>
+
+      <div class="msg" style="left: 0; top: 6%">ولكنني كلما رأيت شمساً أو قمراً
+شجراً وورداً
+وكلما بللني مطراً
+ومشيت في طريق طويل
+واستمعت إلى لحن قديم
+أو أجتاحني شعور سعيد
+تمنيتك معي</div>
+      <div class="msg" style="right: 0; top: 2%; animation-delay: -1s">ليس سهلا ان امضي يومي محاول تجاهل حنيني اليك وحاجتي لصوتك ومعرفة اخبارك ليس سهلا أن اكون مزدحم وحولي الجميع وبالي معك وحدك ليس سهلا أن امتنع عنك بينما رغبتي الوحيدة أن أتخطى كل شيء
+وأأتي إليك</div>
+      <div class="msg" style="left: 0; top: 42%; animation-delay: -2s">Tesnime, you are my favorite place</div>
+      <div class="msg" style="right: 0; top: 42%; animation-delay: -3s">سأبقى معك وأخاف عليك وأهتم فيك وسأبقى روحاً لا تفارقك لن أتخلى عنك يوماً فقد أخبرتك منذ أن عرفتك أنني أحببت حياتي لأجلك وسأبقى على وعدي دائماً أحبك حتى تغلق أجفان عيني وأغادر الحياة .</div>
+      <div class="msg" style="left: 0; bottom: 4%; animation-delay: -1.5s">علاقتنا غريبه ورائعه؛ أنا الغريب، وهي الرائعة</div>
+      <div class="msg" style="right: 0; bottom: 4%; animation-delay: -2.5s">ما أحلى عيونك لمن تحطين ارنارنر اینارنر یا نایر انرانر، مدري شسمه المهم محلاككك.</div>
+    </div>
+
+    <button class="home" onclick="go('menu')" aria-label="Home">🏠</button>
+  </section>
+
+  <!-- Photos -->
+  <section class="page" id="photos">
+    <div class="board">
+  <div class="pol"><img src="imagesphoto1.jpg" alt="Photo 1"></div>
+  <div class="pol"><img src="imagesphoto2.jpg" alt="Photo 2"></div>
+  <div class="pol"><img src="images/photo3.jpg" alt="Photo 3"></div>
+  <div class="pol"><img src="images/photo4.jpg" alt="Photo 4"></div>
+  <div class="pol"><img src="images/photo5.jpg" alt="Photo 5"></div>
+  <div class="pol"><img src="images/photo6.jpg" alt="Photo 6"></div>
+</div>
+  </div>
+</div>
+      <div class="pol" style="left: 4%; top: 4%; width: 30%; height: 42%"><div></div></div>
+      <div class="pol" style="left: 40%; top: 0; width: 15%; height: 60%"><div></div></div>
+      <div class="pol" style="left: 57%; top: 2%; width: 15%; height: 60%"><div></div></div>
+      <div class="pol" style="right: 2%; top: 12%; width: 19%; height: 34%"><div></div></div>
+      <div class="pol" style="left: 0; bottom: 2%; width: 32%; height: 40%"><div></div></div>
+      <div class="pol" style="right: 6%; bottom: 2%; width: 19%; height: 32%"><div></div></div>
+    </div>
+
+    <p class="cap">Captured memories</p>
+    <button class="home" onclick="go('menu')" aria-label="Home">🏠</button>
+  </section>
+
+  <!-- Letter -->
+  <section class="page" id="letter">
+    <div class="letter">
+      <p>My Love,</p>
+      <p>حبيبتي - وأميرتي - ومليكتي - وعشيقتي -
+
+ومغرمتي - ومدللتي - وعزيزتي - وقرة عيني - ونبض قلبي -وسكينة روحي - ومهجتي - وملهمتي - وأنسي - ووطن قلبي -ومأ من روحي - وموطن حنيني - وسر ابتسامتي - وجميل أيامي وأغلى أوقاتي - وصباحي - ومسائي - وليلي - ونهاري - وفجري - وقمري - ونجمي - وسمائي - وغيمتي البيضاء - ومطري - وكوكبي - ووجهتي - وطريقي - ومرفئي - وملاذي - ومأواي - وطمأنينتي - وفرحي - وحكايتي - وأجمل ما خبأه لي القدر - أنت قلبي حين يضيق - وروحي حين تتعب - وعيني حين تشتاق - وصوتي حين يعجز الكلام - وأمنيتي حين أتمنى - ودعائي حين أرفع يدي - وأنت الجوهرة التي لا أضعها حول عنقي بل أحملها في أعماق قلبي - أنت وطني الذي لا أريد له حدوداً -
+
+وسماء لا أخشى تحتها الغياب -
+
+وحكاية كلما قرأتها تمنيت ألا تبلغ نهايتها.
+
+أنت أنت
+
+وما عداك تفاصيل."</p>
+      <p></p>
+      <p class="sig">With all my love,<br>— Achraf</p>
+    </div>
+
+    <button class="home" onclick="go('menu')" aria-label="Home">🏠</button>
+  </section>
+
+  <!-- Unlock -->
+  <section class="page" id="unlock">
+    <svg viewBox="0 0 200 160" width="120" aria-hidden="true">
+      <use href="#cat"></use>
+    </svg>
+    <h1>One last surprise…</h1>
+    <p class="sub">Type your name to unlock the final surprise</p>
+
+    <input
+      id="name"
+      placeholder="Enter your name"
+      autocomplete="off"
+      onkeydown="if (event.key === 'Enter') check()"
+    >
+
+    <div id="hint"></div>
+    <button class="btn" onclick="check()">UNLOCK</button>
+    <button class="home" onclick="go('menu')" aria-label="Home">🏠</button>
+  </section>
+
+  <!-- Future plans -->
+  <section class="page" id="plans">
+    <div class="plans">
+      <h2>Our Future Plans</h2>
+      <p class="sub" style="margin-bottom: 0">Tap to see what's waiting</p>
+
+      <div class="fc">
+        <div class="flip" onclick="this.classList.toggle('open')">
+          <div>
+            <span>One day…</span>
+            <span><b>The First Hug</b>No more screens. Just you and me.</span>
+          </div>
+        </div>
+
+        <div class="flip" onclick="this.classList.toggle('open')">
+          <div>
+            <span>You'll see…</span>
+            <span><b>Our Little Home</b>Simple mornings. Late-night talks.</span>
+          </div>
+        </div>
+
+        <div class="flip" onclick="this.classList.toggle('open')">
+          <div>
+            <span>Trust me…</span>
+            <span><b>Side by Side</b>Hand in hand, every single day.</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="home" onclick="go('menu')" aria-label="Home">🏠</button>
+    </div>
+  </section>
+
+  <script>
+    function go(id) {
+      document.querySelectorAll(".page").forEach(function (page) {
+        page.classList.remove("on");
+      });
+
+      document.getElementById(id).classList.add("on");
+    }
+
+    function check() {
+      const box = document.getElementById("name");
+      const hint = document.getElementById("hint");
+      const value = box.value.trim().toUpperCase();
+
+      if (value === "TESNIME" || value === "TESNIM" || value === "تسنيم") {
+        hint.textContent = "";
+        go("plans");
+      } else {
+        hint.textContent = "Not quite… try your name again 💭";
+        box.classList.remove("shake");
+        void box.offsetWidth;
+        box.classList.add("shake");
+      }
+    }
+
+    function toggleSong() {
+      const audio = document.getElementById("aud");
+      const button = document.getElementById("song");
+
+      if (audio.paused) {
+        audio.play()
+          .then(function () {
+            button.textContent = "Pause Song";
+          })
+          .catch(function () {
+            button.textContent = "Add song.mp3";
+          });
+      } else {
+        audio.pause();
+        button.textContent = "Play Our Song";
+      }
+    }
+
+    const hearts = document.getElementById("hearts");
+
+    [[0, 0], [16, 36], [30, 10], [10, 70], [34, 60]].forEach(function (position, index) {
+      const x = position[0];
+      const y = position[1];
+      const heart = document.createElement("i");
+
+      heart.textContent = "♥";
+      heart.style.cssText =
+        `left:${x}px;top:${y + 20}px;font-size:${14 + (index % 3) * 4}px;animation-delay:${-index * 0.7}s;`;
+
+      hearts.appendChild(heart);
+    });
+  </script>
+</body>
+</html>
